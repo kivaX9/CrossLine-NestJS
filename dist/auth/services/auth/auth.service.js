@@ -12,37 +12,31 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UsersService = void 0;
-const typeorm_1 = require("typeorm");
+exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
-const typeorm_2 = require("@nestjs/typeorm");
+const typeorm_1 = require("@nestjs/typeorm");
 const Profile_1 = require("../../../typeorm/entities/Profile");
 const User_1 = require("../../../typeorm/entities/User");
-let UsersService = class UsersService {
+const typeorm_2 = require("typeorm");
+let AuthService = class AuthService {
     constructor(userRepository, profileRepository) {
         this.userRepository = userRepository;
         this.profileRepository = profileRepository;
     }
-    getUsers() {
-        return this.userRepository.find();
-    }
-    async getUserById(id) {
-        return await this.userRepository.findOneBy({ id });
-    }
-    updateUser(id, updateUserDetails) {
-        return this.userRepository.update({ id }, { ...updateUserDetails });
-    }
-    deleteUser(id) {
-        this.profileRepository.delete({ user: { id } });
-        return this.userRepository.delete({ id });
+    async loginUser(loginUserDetails) {
+        const newUser = this.userRepository.create({ ...loginUserDetails });
+        const savedUser = await this.userRepository.save(newUser);
+        const newProfile = this.profileRepository.create({ user: savedUser });
+        await this.profileRepository.save(newProfile);
+        return savedUser;
     }
 };
-exports.UsersService = UsersService;
-exports.UsersService = UsersService = __decorate([
+exports.AuthService = AuthService;
+exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, typeorm_2.InjectRepository)(User_1.User)),
-    __param(1, (0, typeorm_2.InjectRepository)(Profile_1.Profile)),
-    __metadata("design:paramtypes", [typeorm_1.Repository,
-        typeorm_1.Repository])
-], UsersService);
-//# sourceMappingURL=users.service.js.map
+    __param(0, (0, typeorm_1.InjectRepository)(User_1.User)),
+    __param(1, (0, typeorm_1.InjectRepository)(Profile_1.Profile)),
+    __metadata("design:paramtypes", [typeorm_2.Repository,
+        typeorm_2.Repository])
+], AuthService);
+//# sourceMappingURL=auth.service.js.map

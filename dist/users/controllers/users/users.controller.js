@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersController = void 0;
 const common_1 = require("@nestjs/common");
 const users_service_1 = require("../../services/users/users.service");
-const CreateUser_dto_1 = require("../../dtos/CreateUser.dto");
 const UpdateUser_dto_1 = require("../../dtos/UpdateUser.dto");
 let UsersController = class UsersController {
     constructor(userService) {
@@ -26,9 +25,6 @@ let UsersController = class UsersController {
     }
     getUserById(id) {
         return this.userService.getUserById(id);
-    }
-    createUser(createUserDto) {
-        return this.userService.creatUser(createUserDto);
     }
     async updateUser(id, updateUserDto) {
         await this.userService.updateUser(id, updateUserDto);
@@ -51,13 +47,6 @@ __decorate([
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "getUserById", null);
-__decorate([
-    (0, common_1.Post)('create'),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [CreateUser_dto_1.CreateUserDto]),
-    __metadata("design:returntype", void 0)
-], UsersController.prototype, "createUser", null);
 __decorate([
     (0, common_1.Put)('update/:id'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),

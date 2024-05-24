@@ -1,5 +1,5 @@
 // Create
-export type CreateUserParams = {
+export type RegisterUserParams = {
   username: string;
   password: string;
 };

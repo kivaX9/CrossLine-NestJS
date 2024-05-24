@@ -15,6 +15,7 @@ const users_module_1 = require("./users/users.module");
 const profiles_module_1 = require("./profiles/profiles.module");
 const Profile_1 = require("./typeorm/entities/Profile");
 const User_1 = require("./typeorm/entities/User");
+const auth_module_1 = require("./auth/auth.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -33,6 +34,7 @@ exports.AppModule = AppModule = __decorate([
             }),
             users_module_1.UsersModule,
             profiles_module_1.ProfilesModule,
+            auth_module_1.AuthModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],
