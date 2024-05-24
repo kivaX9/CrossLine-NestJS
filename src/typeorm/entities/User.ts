@@ -1,16 +1,16 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'users' })
 export class User {
   @PrimaryGeneratedColumn({ type: 'bigint' })
-  id: number
+  id: number;
 
   @Column()
-  username: string
+  username: string;
 
   @Column()
-  password: string
+  password: string;
 
   @Column({ default: new Date().toJSON().toString() })
-  createdAt: string
+  createdAt: string;
 }

@@ -1,11 +1,11 @@
-import { Module } from '@nestjs/common'
-import { TypeOrmModule } from '@nestjs/typeorm'
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { UsersController } from './controllers/users/users.controller'
-import { UsersService } from './services/users/users.service'
+import { UsersController } from './controllers/users/users.controller';
+import { UsersService } from './services/users/users.service';
 
-import { Profile } from 'src/typeorm/entities/Profile'
-import { User } from 'src/typeorm/entities/User'
+import { Profile } from 'src/typeorm/entities/Profile';
+import { User } from 'src/typeorm/entities/User';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, Profile])],

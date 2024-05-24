@@ -6,11 +6,11 @@ import {
   Param,
   ParseIntPipe,
   Put,
-} from '@nestjs/common'
+} from '@nestjs/common';
 
-import { UpdateProfileDto } from 'src/profiles/dtos/UpdateProfile'
+import { UpdateProfileDto } from 'src/profiles/dtos/UpdateProfile';
 
-import { ProfilesService } from 'src/profiles/services/profiles/profiles.service'
+import { ProfilesService } from 'src/profiles/services/profiles/profiles.service';
 
 @Controller('profiles')
 export class ProfilesController {
@@ -19,7 +19,7 @@ export class ProfilesController {
   // Get
   @Get('get/:id')
   getProfile(@Param('id', ParseIntPipe) id: number) {
-    return this.profileService.getProfile(id)
+    return this.profileService.getProfile(id);
   }
 
   // Put
@@ -28,12 +28,12 @@ export class ProfilesController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateProfileDto: UpdateProfileDto,
   ) {
-    await this.profileService.updateProfile(id, updateProfileDto)
+    await this.profileService.updateProfile(id, updateProfileDto);
   }
 
   // Delete
   @Delete('delete/:id')
   async deleteUser(@Param('id', ParseIntPipe) id: number) {
-    await this.profileService.deleteUser(id)
+    await this.profileService.deleteUser(id);
   }
 }

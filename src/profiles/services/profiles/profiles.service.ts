@@ -1,10 +1,10 @@
-import { Repository } from 'typeorm'
-import { Injectable } from '@nestjs/common'
-import { InjectRepository } from '@nestjs/typeorm'
+import { Repository } from 'typeorm';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 
-import { Profile } from 'src/typeorm/entities/Profile'
+import { Profile } from 'src/typeorm/entities/Profile';
 
-import { UpdateProfileParams } from 'src/utils/types'
+import { UpdateProfileParams } from 'src/utils/types';
 
 @Injectable()
 export class ProfilesService {
@@ -17,7 +17,7 @@ export class ProfilesService {
     return await this.profileRepository.findOne({
       where: { user: { id } },
       relations: { user: true },
-    })
+    });
   }
 
   // Put
@@ -25,11 +25,11 @@ export class ProfilesService {
     return this.profileRepository.update(
       { user: { id } },
       { ...updateProfileDetails },
-    )
+    );
   }
 
   // Delete
   deleteUser(id: number) {
-    return this.profileRepository.delete({ id })
+    return this.profileRepository.delete({ id });
   }
 }

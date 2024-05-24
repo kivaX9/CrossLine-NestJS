@@ -4,18 +4,18 @@ import {
   JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
-} from 'typeorm'
-import { User } from './User'
+} from 'typeorm';
+import { User } from './User';
 
 @Entity({ name: 'profiles' })
 export class Profile {
   @PrimaryGeneratedColumn({ type: 'bigint' })
-  id: number
+  id: number;
 
   @Column({ nullable: true })
-  telephone: string
+  telephone: string;
 
   @OneToOne(() => User)
   @JoinColumn()
-  user: User
+  user: User;
 }
