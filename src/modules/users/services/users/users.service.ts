@@ -1,3 +1,5 @@
+import * as bcrypt from 'bcrypt';
+
 import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -24,9 +26,13 @@ export class UsersService {
   }
 
   // Put
-  updateUser(id: number, updateUserDetails: UpdateUserDto) {
+  async updateUser(id: number, updateUserDetails: UpdateUserDto) {
     const { username, password } = updateUserDetails;
-    return this.userRepository.update({ id }, { username, password });
+
+    const saltOrRounds = 10;
+    const hash = await bcrypt.hash(password, saltOrRounds);
+
+    return this.userRepository.update({ id }, { username, password: hash });
   }
 
   // Delete

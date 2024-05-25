@@ -1,27 +1,32 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
+
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 
 import { Profile } from 'src/typeorm/entities/Profile';
 import { User } from 'src/typeorm/entities/User';
-import {
-  LoginUserDto,
-  RegisterUserDto,
-} from 'src/modules/auth/dtos/LoginUser.dto';
+
+import { RegisterUserDto } from '../../dtos/RegisterUser.dto';
+import { LoginUserDto } from '../../dtos/LoginUser.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(Profile) private profileRepository: Repository<Profile>,
-    private jwtService: JwtService,
+    @Inject(JwtService) private jwtService: JwtService,
   ) {}
 
   // Post
   async registerUser(registerUserDetails: RegisterUserDto) {
     const { username, password } = registerUserDetails;
-    const newUser = this.userRepository.create({ username, password });
+
+    const saltOrRounds = 10;
+    const hash = await bcrypt.hash(password, saltOrRounds);
+
+    const newUser = this.userRepository.create({ username, password: hash });
 
     const savedUser = await this.userRepository.save(newUser);
 
@@ -35,7 +40,10 @@ export class AuthService {
     const { username, password } = loginUserDetails;
     const user = await this.userRepository.findOneBy({ username });
 
-    if (user.password !== password) {
+    const { password: hash } = user;
+    const isMatch = await bcrypt.compare(password, hash);
+
+    if (!isMatch) {
       throw new UnauthorizedException();
     }
 

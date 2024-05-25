@@ -18,7 +18,7 @@ import { User } from 'src/typeorm/entities/User';
       useFactory: (configService: ConfigService) => ({
         global: true,
         secret: configService.get<string>('JWT_SECRET'),
-        signOptions: { expiresIn: '30s' },
+        signOptions: { expiresIn: '4h' },
       }),
     }),
   ],
