@@ -1,15 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Profile } from 'src/typeorm/entities/Profile';
 import { User } from 'src/typeorm/entities/User';
-import { RegisterUserParams } from 'src/utils/types';
+import { LoginUserParams, RegisterUserParams } from 'src/utils/types';
 import { Repository } from 'typeorm';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(Profile) private profileRepository: Repository<Profile>,
+    private jwtService: JwtService,
   ) {}
 
   // Post
@@ -22,5 +24,16 @@ export class AuthService {
     await this.profileRepository.save(newProfile);
 
     return savedUser;
+  }
+
+  async loginUser(loginUserDetails: LoginUserParams) {
+    const { username, password } = loginUserDetails;
+    const user = await this.userRepository.findOneBy({ username });
+    if (user.password !== password) {
+      throw new UnauthorizedException();
+    }
+    const payload = { sub: user.id, username: user.username };
+    user.token = await this.jwtService.signAsync(payload);
+    return user;
   }
 }

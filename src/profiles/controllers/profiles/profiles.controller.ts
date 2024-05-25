@@ -6,7 +6,9 @@ import {
   Param,
   ParseIntPipe,
   Put,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from 'src/guards/auth.guards';
 
 import { UpdateProfileDto } from 'src/profiles/dtos/UpdateProfile';
 
@@ -17,12 +19,14 @@ export class ProfilesController {
   constructor(private profileService: ProfilesService) {}
 
   // Get
+  @UseGuards(AuthGuard)
   @Get('get/:id')
   getProfile(@Param('id', ParseIntPipe) id: number) {
     return this.profileService.getProfile(id);
   }
 
   // Put
+  @UseGuards(AuthGuard)
   @Put('update/:id')
   async updateProfile(
     @Param('id', ParseIntPipe) id: number,
@@ -32,6 +36,7 @@ export class ProfilesController {
   }
 
   // Delete
+  @UseGuards(AuthGuard)
   @Delete('delete/:id')
   async deleteUser(@Param('id', ParseIntPipe) id: number) {
     await this.profileService.deleteUser(id);

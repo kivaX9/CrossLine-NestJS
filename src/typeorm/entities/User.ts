@@ -5,7 +5,7 @@ export class User {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   username: string;
 
   @Column()
@@ -13,4 +13,7 @@ export class User {
 
   @Column({ default: new Date().toJSON().toString() })
   createdAt: string;
+
+  @Column({ nullable: true })
+  token: string;
 }

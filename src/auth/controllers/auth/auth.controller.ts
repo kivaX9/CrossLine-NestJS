@@ -1,5 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { RegisterUserDto } from 'src/auth/dtos/LoginUser.dto';
+import { LoginUserDto, RegisterUserDto } from 'src/auth/dtos/LoginUser.dto';
 
 import { AuthService } from 'src/auth/services/auth/auth.service';
 
@@ -8,8 +8,13 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   // Post
-  @Post('login')
+  @Post('register')
   registerUser(@Body() registerUserDto: RegisterUserDto) {
     return this.authService.registerUser(registerUserDto);
+  }
+
+  @Post('login')
+  loginUser(@Body() loginrUserDto: LoginUserDto) {
+    return this.authService.loginUser(loginrUserDto);
   }
 }

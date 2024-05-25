@@ -4,6 +4,11 @@ export type RegisterUserParams = {
   password: string;
 };
 
+export type LoginUserParams = {
+  username: string;
+  password: string;
+};
+
 // Update
 export type UpdateUserParams = {
   username: string;

@@ -14,6 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProfilesController = void 0;
 const common_1 = require("@nestjs/common");
+const auth_guards_1 = require("../../../guards/auth.guards");
 const UpdateProfile_1 = require("../../dtos/UpdateProfile");
 const profiles_service_1 = require("../../services/profiles/profiles.service");
 let ProfilesController = class ProfilesController {
@@ -32,6 +33,7 @@ let ProfilesController = class ProfilesController {
 };
 exports.ProfilesController = ProfilesController;
 __decorate([
+    (0, common_1.UseGuards)(auth_guards_1.AuthGuard),
     (0, common_1.Get)('get/:id'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
@@ -39,6 +41,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], ProfilesController.prototype, "getProfile", null);
 __decorate([
+    (0, common_1.UseGuards)(auth_guards_1.AuthGuard),
     (0, common_1.Put)('update/:id'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, common_1.Body)()),
@@ -47,6 +50,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ProfilesController.prototype, "updateProfile", null);
 __decorate([
+    (0, common_1.UseGuards)(auth_guards_1.AuthGuard),
     (0, common_1.Delete)('delete/:id'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),

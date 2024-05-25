@@ -18,17 +18,29 @@ const typeorm_1 = require("@nestjs/typeorm");
 const Profile_1 = require("../../../typeorm/entities/Profile");
 const User_1 = require("../../../typeorm/entities/User");
 const typeorm_2 = require("typeorm");
+const jwt_1 = require("@nestjs/jwt");
 let AuthService = class AuthService {
-    constructor(userRepository, profileRepository) {
+    constructor(userRepository, profileRepository, jwtService) {
         this.userRepository = userRepository;
         this.profileRepository = profileRepository;
+        this.jwtService = jwtService;
     }
-    async loginUser(loginUserDetails) {
-        const newUser = this.userRepository.create({ ...loginUserDetails });
+    async registerUser(registerUserDetails) {
+        const newUser = this.userRepository.create({ ...registerUserDetails });
         const savedUser = await this.userRepository.save(newUser);
         const newProfile = this.profileRepository.create({ user: savedUser });
         await this.profileRepository.save(newProfile);
         return savedUser;
+    }
+    async loginUser(loginUserDetails) {
+        const { username, password } = loginUserDetails;
+        const user = await this.userRepository.findOneBy({ username });
+        if (user.password !== password) {
+            throw new common_1.UnauthorizedException();
+        }
+        const payload = { sub: user.id, username: user.username };
+        user.token = await this.jwtService.signAsync(payload);
+        return user;
     }
 };
 exports.AuthService = AuthService;
@@ -37,6 +49,7 @@ exports.AuthService = AuthService = __decorate([
     __param(0, (0, typeorm_1.InjectRepository)(User_1.User)),
     __param(1, (0, typeorm_1.InjectRepository)(Profile_1.Profile)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
-        typeorm_2.Repository])
+        typeorm_2.Repository,
+        jwt_1.JwtService])
 ], AuthService);
 //# sourceMappingURL=auth.service.js.map
