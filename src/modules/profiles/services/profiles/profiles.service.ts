@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { Profile } from 'src/typeorm/entities/Profile';
 
-import { UpdateProfileParams } from 'src/utils/types';
+import { UpdateProfileDto } from 'src/modules/profiles/dtos/UpdateProfile';
 
 @Injectable()
 export class ProfilesService {
@@ -21,11 +21,9 @@ export class ProfilesService {
   }
 
   // Put
-  updateProfile(id: number, updateProfileDetails: UpdateProfileParams) {
-    return this.profileRepository.update(
-      { user: { id } },
-      { ...updateProfileDetails },
-    );
+  updateProfile(id: number, updateProfileDetails: UpdateProfileDto) {
+    const { telephone } = updateProfileDetails;
+    return this.profileRepository.update({ user: { id } }, { telephone });
   }
 
   // Delete

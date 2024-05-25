@@ -5,8 +5,10 @@ import { JwtService } from '@nestjs/jwt';
 
 import { Profile } from 'src/typeorm/entities/Profile';
 import { User } from 'src/typeorm/entities/User';
-
-import { LoginUserParams, RegisterUserParams } from 'src/utils/types';
+import {
+  LoginUserDto,
+  RegisterUserDto,
+} from 'src/modules/auth/dtos/LoginUser.dto';
 
 @Injectable()
 export class AuthService {
@@ -17,8 +19,9 @@ export class AuthService {
   ) {}
 
   // Post
-  async registerUser(registerUserDetails: RegisterUserParams) {
-    const newUser = this.userRepository.create({ ...registerUserDetails });
+  async registerUser(registerUserDetails: RegisterUserDto) {
+    const { username, password } = registerUserDetails;
+    const newUser = this.userRepository.create({ username, password });
 
     const savedUser = await this.userRepository.save(newUser);
 
@@ -28,7 +31,7 @@ export class AuthService {
     return savedUser;
   }
 
-  async loginUser(loginUserDetails: LoginUserParams) {
+  async loginUser(loginUserDetails: LoginUserDto) {
     const { username, password } = loginUserDetails;
     const user = await this.userRepository.findOneBy({ username });
 

@@ -9,8 +9,8 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { ProfilesModule } from './profiles/profiles.module';
 
-import { Profile } from './typeorm/entities/Profile';
-import { User } from './typeorm/entities/User';
+import { Profile } from '../typeorm/entities/Profile';
+import { User } from '../typeorm/entities/User';
 
 @Module({
   imports: [

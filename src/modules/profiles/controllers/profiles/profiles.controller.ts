@@ -10,9 +10,9 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from 'src/guards/auth.guards';
 
-import { UpdateProfileDto } from 'src/profiles/dtos/UpdateProfile';
+import { UpdateProfileDto } from 'src/modules/profiles/dtos/UpdateProfile';
 
-import { ProfilesService } from 'src/profiles/services/profiles/profiles.service';
+import { ProfilesService } from 'src/modules/profiles/services/profiles/profiles.service';
 
 @Controller('profiles')
 export class ProfilesController {

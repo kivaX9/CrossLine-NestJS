@@ -10,9 +10,9 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from 'src/guards/auth.guards';
 
-import { UsersService } from 'src/users/services/users/users.service';
+import { UsersService } from 'src/modules/users/services/users/users.service';
 
-import { UpdateUserDto } from 'src/users/dtos/UpdateUser.dto';
+import { UpdateUserDto } from 'src/modules/users/dtos/UpdateUser.dto';
 
 @Controller('users')
 export class UsersController {
