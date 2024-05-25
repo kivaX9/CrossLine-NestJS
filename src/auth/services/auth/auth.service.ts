@@ -31,11 +31,14 @@ export class AuthService {
   async loginUser(loginUserDetails: LoginUserParams) {
     const { username, password } = loginUserDetails;
     const user = await this.userRepository.findOneBy({ username });
+
     if (user.password !== password) {
       throw new UnauthorizedException();
     }
+
     const payload = { sub: user.id, username: user.username };
-    user.token = await this.jwtService.signAsync(payload);
-    return user;
+    const token = await this.jwtService.signAsync(payload);
+
+    return { ...user, token };
   }
 }
