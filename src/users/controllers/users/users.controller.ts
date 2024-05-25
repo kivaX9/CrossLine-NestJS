@@ -8,11 +8,11 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from 'src/guards/auth.guards';
 
 import { UsersService } from 'src/users/services/users/users.service';
 
 import { UpdateUserDto } from 'src/users/dtos/UpdateUser.dto';
-import { AuthGuard } from 'src/guards/auth.guards';
 
 @Controller('users')
 export class UsersController {

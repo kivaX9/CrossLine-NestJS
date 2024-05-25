@@ -9,6 +9,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersModule = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
+const jwt_1 = require("@nestjs/jwt");
 const users_controller_1 = require("./controllers/users/users.controller");
 const users_service_1 = require("./services/users/users.service");
 const Profile_1 = require("../typeorm/entities/Profile");
@@ -20,7 +21,7 @@ exports.UsersModule = UsersModule = __decorate([
     (0, common_1.Module)({
         imports: [typeorm_1.TypeOrmModule.forFeature([User_1.User, Profile_1.Profile])],
         controllers: [users_controller_1.UsersController],
-        providers: [users_service_1.UsersService],
+        providers: [users_service_1.UsersService, jwt_1.JwtService],
     })
 ], UsersModule);
 //# sourceMappingURL=users.module.js.map

@@ -15,10 +15,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
-const Profile_1 = require("../../../typeorm/entities/Profile");
-const User_1 = require("../../../typeorm/entities/User");
 const typeorm_2 = require("typeorm");
 const jwt_1 = require("@nestjs/jwt");
+const Profile_1 = require("../../../typeorm/entities/Profile");
+const User_1 = require("../../../typeorm/entities/User");
 let AuthService = class AuthService {
     constructor(userRepository, profileRepository, jwtService) {
         this.userRepository = userRepository;

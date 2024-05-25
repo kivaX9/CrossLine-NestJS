@@ -9,12 +9,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthModule = void 0;
 const typeorm_1 = require("@nestjs/typeorm");
 const common_1 = require("@nestjs/common");
+const jwt_1 = require("@nestjs/jwt");
+const config_1 = require("@nestjs/config");
 const auth_controller_1 = require("./controllers/auth/auth.controller");
 const auth_service_1 = require("./services/auth/auth.service");
 const Profile_1 = require("../typeorm/entities/Profile");
 const User_1 = require("../typeorm/entities/User");
-const jwt_1 = require("@nestjs/jwt");
-const constants_1 = require("./constants");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
@@ -22,14 +22,17 @@ exports.AuthModule = AuthModule = __decorate([
     (0, common_1.Module)({
         imports: [
             typeorm_1.TypeOrmModule.forFeature([User_1.User, Profile_1.Profile]),
-            jwt_1.JwtModule.register({
-                global: true,
-                secret: constants_1.jwtConstants.secret,
-                signOptions: { expiresIn: '60s' },
+            jwt_1.JwtModule.registerAsync({
+                inject: [config_1.ConfigService],
+                useFactory: (configService) => ({
+                    global: true,
+                    secret: configService.get('JWT_SECRET'),
+                    signOptions: { expiresIn: '30s' },
+                }),
             }),
         ],
         controllers: [auth_controller_1.AuthController],
-        providers: [auth_service_1.AuthService],
+        providers: [auth_service_1.AuthService, config_1.ConfigService],
     })
 ], AuthModule);
 //# sourceMappingURL=auth.module.js.map

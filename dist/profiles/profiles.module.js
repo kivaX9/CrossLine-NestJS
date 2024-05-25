@@ -9,6 +9,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProfilesModule = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
+const jwt_1 = require("@nestjs/jwt");
 const profiles_controller_1 = require("./controllers/profiles/profiles.controller");
 const profiles_service_1 = require("./services/profiles/profiles.service");
 const Profile_1 = require("../typeorm/entities/Profile");
@@ -19,7 +20,7 @@ exports.ProfilesModule = ProfilesModule = __decorate([
     (0, common_1.Module)({
         imports: [typeorm_1.TypeOrmModule.forFeature([Profile_1.Profile])],
         controllers: [profiles_controller_1.ProfilesController],
-        providers: [profiles_service_1.ProfilesService],
+        providers: [profiles_service_1.ProfilesService, jwt_1.JwtService],
     })
 ], ProfilesModule);
 //# sourceMappingURL=profiles.module.js.map
