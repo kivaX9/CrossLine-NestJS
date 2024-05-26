@@ -9,24 +9,25 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from 'src/guards/auth.guards';
+import { ThrottlerGuard } from '@nestjs/throttler';
 
 import { UpdateProfileDto } from 'src/modules/profiles/dtos/UpdateProfile';
 
 import { ProfilesService } from 'src/modules/profiles/services/profiles/profiles.service';
 
+@UseGuards(AuthGuard)
+@UseGuards(ThrottlerGuard)
 @Controller('profiles')
 export class ProfilesController {
   constructor(private profileService: ProfilesService) {}
 
   // Get
-  @UseGuards(AuthGuard)
   @Get('get/:id')
   getProfile(@Param('id', ParseIntPipe) id: number) {
     return this.profileService.getProfile(id);
   }
 
   // Put
-  @UseGuards(AuthGuard)
   @Put('update/:id')
   async updateProfile(
     @Param('id', ParseIntPipe) id: number,
@@ -36,7 +37,6 @@ export class ProfilesController {
   }
 
   // Delete
-  @UseGuards(AuthGuard)
   @Delete('delete/:id')
   async deleteUser(@Param('id', ParseIntPipe) id: number) {
     await this.profileService.deleteUser(id);

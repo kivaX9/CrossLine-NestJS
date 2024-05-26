@@ -9,30 +9,30 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from 'src/guards/auth.guards';
+import { ThrottlerGuard } from '@nestjs/throttler';
 
 import { UsersService } from 'src/modules/users/services/users/users.service';
 
 import { UpdateUserDto } from 'src/modules/users/dtos/UpdateUser.dto';
 
+@UseGuards(AuthGuard)
+@UseGuards(ThrottlerGuard)
 @Controller('users')
 export class UsersController {
   constructor(private userService: UsersService) {}
 
   // Get
-  @UseGuards(AuthGuard)
   @Get('all')
   getUsers() {
     return this.userService.getUsers();
   }
 
-  @UseGuards(AuthGuard)
   @Get(':id')
   getUserById(@Param('id', ParseIntPipe) id: number) {
     return this.userService.getUserById(id);
   }
 
   // Put
-  @UseGuards(AuthGuard)
   @Put('update/:id')
   async updateUser(
     @Param('id', ParseIntPipe) id: number,
@@ -42,7 +42,6 @@ export class UsersController {
   }
 
   // Delete
-  @UseGuards(AuthGuard)
   @Delete('delete/:id')
   async deleteUser(@Param('id', ParseIntPipe) id: number) {
     await this.userService.deleteUser(id);
