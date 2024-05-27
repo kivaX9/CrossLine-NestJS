@@ -11,6 +11,7 @@ import { User } from 'src/typeorm/entities/User';
 
 import { RegisterUserDto } from '../../dtos/RegisterUser.dto';
 import { LoginUserDto } from '../../dtos/LoginUser.dto';
+import { NewTokens } from 'src/utils/getNewTokens';
 
 @Injectable()
 export class AuthService {
@@ -19,6 +20,7 @@ export class AuthService {
     @InjectRepository(Profile) private profileRepository: Repository<Profile>,
     @Inject(JwtService) private jwtService: JwtService,
     @Inject(ConfigService) private configService: ConfigService,
+    @Inject(NewTokens) private newTokens: NewTokens,
   ) {}
 
   // Post
@@ -34,12 +36,6 @@ export class AuthService {
 
     const newProfile = this.profileRepository.create({ user: savedUser });
     await this.profileRepository.save(newProfile);
-
-    const returnUser = {
-      ...savedUser,
-      password: undefined,
-    };
-    return returnUser;
   }
 
   async loginUser(loginUserDetails: LoginUserDto) {
@@ -53,19 +49,12 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    const payload = { sub: user.id, username: user.username };
-    const accessToken = await this.jwtService.signAsync(payload, {
-      expiresIn: '15m',
-    });
-    const refreshToken = await this.jwtService.signAsync(payload, {
-      expiresIn: '7d',
-    });
+    const tokens = await this.newTokens.get(user);
 
     const returnUser = {
       ...user,
       password: undefined,
-      accessToken,
-      refreshToken,
+      ...tokens,
     };
     return returnUser;
   }
@@ -80,11 +69,8 @@ export class AuthService {
       throw new UnauthorizedException();
     }
 
-    const newPayload = { sub: user.id, username: user.username };
-    const newAccessToken = await this.jwtService.signAsync(newPayload, {
-      expiresIn: '15m',
-    });
+    const tokens = await this.newTokens.get(user);
 
-    return { accessToken: newAccessToken };
+    return tokens;
   }
 }

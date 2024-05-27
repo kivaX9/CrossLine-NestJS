@@ -5,6 +5,10 @@ import * as csurf from 'csurf';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  // Безопасные запросы к ресурсам на других доменах
+  app.enableCors();
+
   await app.listen(3000);
 
   // Защита от подделок межсайтовых запросов

@@ -10,6 +10,7 @@ import { AuthService } from './services/auth/auth.service';
 import { Profile } from 'src/typeorm/entities/Profile';
 import { User } from 'src/typeorm/entities/User';
 import { AuthMiddleware } from 'src/middlewares/auth.middleware';
+import { NewTokens } from 'src/utils/getNewTokens';
 
 @Module({
   imports: [
@@ -24,7 +25,7 @@ import { AuthMiddleware } from 'src/middlewares/auth.middleware';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, ConfigService],
+  providers: [AuthService, ConfigService, NewTokens],
 })
 export class AuthModule {
   configure(consumer: MiddlewareConsumer) {
