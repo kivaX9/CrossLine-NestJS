@@ -4,6 +4,7 @@ import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 
 import { Profile } from 'src/typeorm/entities/Profile';
 import { User } from 'src/typeorm/entities/User';
@@ -17,6 +18,7 @@ export class AuthService {
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(Profile) private profileRepository: Repository<Profile>,
     @Inject(JwtService) private jwtService: JwtService,
+    @Inject(ConfigService) private configService: ConfigService,
   ) {}
 
   // Post
@@ -33,7 +35,11 @@ export class AuthService {
     const newProfile = this.profileRepository.create({ user: savedUser });
     await this.profileRepository.save(newProfile);
 
-    return savedUser;
+    const returnUser = {
+      ...savedUser,
+      password: undefined,
+    };
+    return returnUser;
   }
 
   async loginUser(loginUserDetails: LoginUserDto) {
@@ -48,8 +54,37 @@ export class AuthService {
     }
 
     const payload = { sub: user.id, username: user.username };
-    const token = await this.jwtService.signAsync(payload);
+    const accessToken = await this.jwtService.signAsync(payload, {
+      expiresIn: '15m',
+    });
+    const refreshToken = await this.jwtService.signAsync(payload, {
+      expiresIn: '7d',
+    });
 
-    return { ...user, token };
+    const returnUser = {
+      ...user,
+      password: undefined,
+      accessToken,
+      refreshToken,
+    };
+    return returnUser;
+  }
+
+  async refresh(refreshToken: string) {
+    const payload = await this.jwtService.verifyAsync(refreshToken, {
+      secret: this.configService.get<string>('JWT_SECRET'),
+    });
+    const user = await this.userRepository.findOneBy({ id: payload.sub });
+
+    if (!user || !refreshToken) {
+      throw new UnauthorizedException();
+    }
+
+    const newPayload = { sub: user.id, username: user.username };
+    const newAccessToken = await this.jwtService.signAsync(newPayload, {
+      expiresIn: '15m',
+    });
+
+    return { accessToken: newAccessToken };
   }
 }

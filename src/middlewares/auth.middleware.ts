@@ -1,36 +1,35 @@
 import {
-  CanActivate,
-  ExecutionContext,
   Inject,
   Injectable,
+  NestMiddleware,
   UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { Request } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class AuthMiddleware implements NestMiddleware {
   constructor(
     @Inject(JwtService) private jwtService: JwtService,
     @Inject(ConfigService) private configService: ConfigService,
   ) {}
+  async use(req: Request, res: Response, next: NextFunction) {
+    const token = this.extractTokenFromHeader(req);
 
-  async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest();
-    const token = this.extractTokenFromHeader(request);
     if (!token) {
       throw new UnauthorizedException();
     }
+
     try {
       const payload = await this.jwtService.verifyAsync(token, {
         secret: this.configService.get<string>('JWT_SECRET'),
       });
-      request['user'] = payload;
-    } catch {
+      req['user'] = payload;
+      next();
+    } catch (err) {
       throw new UnauthorizedException();
     }
-    return true;
   }
 
   private extractTokenFromHeader(request: Request): string | undefined {

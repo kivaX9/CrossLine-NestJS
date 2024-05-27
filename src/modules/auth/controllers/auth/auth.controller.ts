@@ -3,6 +3,7 @@ import { ThrottlerGuard } from '@nestjs/throttler';
 
 import { RegisterUserDto } from '../../dtos/RegisterUser.dto';
 import { LoginUserDto } from '../../dtos/LoginUser.dto';
+import { RefreshTokenDto } from '../../dtos/RefreshToken.dto';
 
 import { AuthService } from 'src/modules/auth/services/auth/auth.service';
 
@@ -20,5 +21,10 @@ export class AuthController {
   @Post('login')
   loginUser(@Body() loginrUserDto: LoginUserDto) {
     return this.authService.loginUser(loginrUserDto);
+  }
+
+  @Post('refresh')
+  refreshToken(@Body() refreshTokenDto: RefreshTokenDto) {
+    return this.authService.refresh(refreshTokenDto.token);
   }
 }

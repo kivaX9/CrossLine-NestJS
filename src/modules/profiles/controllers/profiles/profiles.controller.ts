@@ -8,14 +8,12 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from 'src/guards/auth.guards';
 import { ThrottlerGuard } from '@nestjs/throttler';
 
 import { UpdateProfileDto } from 'src/modules/profiles/dtos/UpdateProfile';
 
 import { ProfilesService } from 'src/modules/profiles/services/profiles/profiles.service';
 
-@UseGuards(AuthGuard)
 @UseGuards(ThrottlerGuard)
 @Controller('profiles')
 export class ProfilesController {
