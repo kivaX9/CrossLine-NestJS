@@ -9,7 +9,7 @@ async function bootstrap() {
   // Безопасные запросы к ресурсам на других доменах
   app.enableCors();
 
-  await app.listen(3000);
+  await app.listen(8080);
 
   // Защита от подделок межсайтовых запросов
   app.use(csurf());
