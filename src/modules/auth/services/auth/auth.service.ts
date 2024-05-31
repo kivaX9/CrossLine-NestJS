@@ -25,7 +25,7 @@ export class AuthService {
 
   // Post
   async registerUser(registerUserDetails: RegisterUserDto) {
-    const { username, password } = registerUserDetails;
+    const { username, password, firstName, lastName } = registerUserDetails;
 
     const saltOrRounds = 10;
     const hash = await bcrypt.hash(password, saltOrRounds);
@@ -34,7 +34,11 @@ export class AuthService {
 
     const savedUser = await this.userRepository.save(newUser);
 
-    const newProfile = this.profileRepository.create({ user: savedUser });
+    const newProfile = this.profileRepository.create({
+      user: savedUser,
+      firstName,
+      lastName,
+    });
     await this.profileRepository.save(newProfile);
   }
 
