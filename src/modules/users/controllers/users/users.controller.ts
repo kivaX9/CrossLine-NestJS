@@ -14,7 +14,6 @@ import { UsersService } from 'src/modules/users/services/users/users.service';
 
 import { UpdateUserDto } from 'src/modules/users/dtos/UpdateUser.dto';
 
-@UseGuards(ThrottlerGuard)
 @Controller('users')
 export class UsersController {
   constructor(private userService: UsersService) {}
@@ -31,6 +30,7 @@ export class UsersController {
   }
 
   // Put
+  @UseGuards(ThrottlerGuard)
   @Put('update/:id')
   async updateUser(
     @Param('id', ParseIntPipe) id: number,
@@ -40,6 +40,7 @@ export class UsersController {
   }
 
   // Delete
+  @UseGuards(ThrottlerGuard)
   @Delete('delete/:id')
   async deleteUser(@Param('id', ParseIntPipe) id: number) {
     await this.userService.deleteUser(id);

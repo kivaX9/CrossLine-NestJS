@@ -22,8 +22,11 @@ export class ProfilesService {
 
   // Put
   updateProfile(id: number, updateProfileDetails: UpdateProfileDto) {
-    const { telephone } = updateProfileDetails;
-    return this.profileRepository.update({ user: { id } }, { telephone });
+    const { telephone, firstName, lastName } = updateProfileDetails;
+    return this.profileRepository.update(
+      { user: { id } },
+      { telephone, firstName, lastName },
+    );
   }
 
   // Delete

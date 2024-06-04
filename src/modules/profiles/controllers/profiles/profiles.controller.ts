@@ -14,7 +14,6 @@ import { UpdateProfileDto } from 'src/modules/profiles/dtos/UpdateProfile';
 
 import { ProfilesService } from 'src/modules/profiles/services/profiles/profiles.service';
 
-@UseGuards(ThrottlerGuard)
 @Controller('profiles')
 export class ProfilesController {
   constructor(private profileService: ProfilesService) {}
@@ -26,6 +25,7 @@ export class ProfilesController {
   }
 
   // Put
+  @UseGuards(ThrottlerGuard)
   @Put('update/:id')
   async updateProfile(
     @Param('id', ParseIntPipe) id: number,
@@ -35,6 +35,7 @@ export class ProfilesController {
   }
 
   // Delete
+  @UseGuards(ThrottlerGuard)
   @Delete('delete/:id')
   async deleteUser(@Param('id', ParseIntPipe) id: number) {
     await this.profileService.deleteUser(id);
